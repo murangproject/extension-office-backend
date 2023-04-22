@@ -14,6 +14,10 @@ class SubjectData extends Model
         'lec_units',
     ];
 
+    public function sections() {
+        return $this->belongsToMany(Section::class);
+    }
+
     public function instructor() {
         return $this->hasOne(User::class, 'instructor_id');
     }

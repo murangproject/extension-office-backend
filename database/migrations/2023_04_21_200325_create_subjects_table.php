@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->string('title');
             $table->string('description');
             $table->string('syllabus');
+            $table->boolean('deleted')->default(false);
             $table->timestamps();
         });
     }

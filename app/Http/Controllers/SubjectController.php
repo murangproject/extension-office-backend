@@ -7,43 +7,64 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $subjects = Subject::all()->where('deleted', false)->values();
+        if($subjects) {
+            return response()->json($subjects, 200);
+        } else {
+            return response()->json(['message' => 'No subjects found'], 404);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $fields = $request->validate([
+            'code' => 'required|string|unique:subjects,code',
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            'syllabus' => 'nullable|string',
+        ]);
+
+        $subject = Subject::create($fields);
+        if($subject) {
+            return response()->json(['message' => 'Subject created successfully', 'data' => $subject], 200);
+        } else {
+            return response()->json(['message' => 'Subject not created'], 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Subject $subject)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Subject $subject)
+    public function update(Request $request)
     {
-        //
+        $fields = $request->validate([
+            'code' => 'required|string|unique:subjects,code,'.$request->id,
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            'syllabus' => 'nullable|string',
+        ]);
+
+        $subject = Subject::where('id', $request->id);
+        if($subject) {
+            $subject->update($fields);
+            return response()->json(['message' => 'Subject updated successfully', 'data' => $subject], 200);
+        } else {
+            return response()->json(['message' => 'Subject not found'], 404);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Subject $subject)
     {
-        //
+        $subjectToDelete = Subject::where('id', $subject->id);
+        if($subjectToDelete) {
+            $subjectToDelete->update(['deleted' => true]);
+            return response()->json(['message' => 'Subject deleted successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Subject not found'], 404);
+        }
     }
 }
