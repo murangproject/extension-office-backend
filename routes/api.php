@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\TermController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/academic-years/{id}', [AcademicYearController::class, 'update']);
     Route::delete('/academic-years/{id}', [AcademicYearController::class, 'destroy']);
 
+    // Term
+    Route::get('/terms', [TermController::class, 'index']);
+    Route::post('/terms', [TermController::class, 'store']);
+    Route::get('/terms/{id}', [TermController::class, 'show']);
+    Route::put('/terms/{id}', [TermController::class, 'update']);
+    Route::delete('/terms/{id}', [TermController::class, 'destroy']);
 });
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {

@@ -20,8 +20,8 @@ class AcademicYearController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'start_year' => 'required|string|unique:academic_years,start_year',
-            'end_year' => 'required|string|unique:academic_years,end_year',
+            'start_year' => 'required|string',
+            'end_year' => 'required|string',
         ]);
 
         $academicYear = AcademicYear::create($fields);

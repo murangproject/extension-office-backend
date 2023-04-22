@@ -26,7 +26,7 @@ class TermController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'name' => 'required|string|unique:terms,name',
+            'name' => 'required|string',
         ]);
 
         $term = Term::create($fields);
@@ -60,7 +60,7 @@ class TermController extends Controller
     {
         $termToDelete = Term::where('id', $request->id);
         if($termToDelete->count() > 0) {
-            $termToDelete->delete();
+            $termToDelete->update(['deleted' => true]);
             return response()->json(['message' => 'Term deleted successfully'], 200);
         } else {
             return response()->json(['message' => 'Term not found'], 404);
